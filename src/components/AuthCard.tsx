@@ -1,14 +1,23 @@
-import React from 'react';
-import { Mail, Shield, Loader2 } from 'lucide-react';
+import React from "react";
+import { Mail, Shield, Loader2, FileText, ExternalLink } from "lucide-react";
 
 interface AuthCardProps {
   onSignIn: () => void;
   isLoading: boolean;
   error: string | null;
   isReady: boolean;
+  onShowSecurity: () => void;
+  onShowPrivacy: () => void;
 }
 
-export const AuthCard: React.FC<AuthCardProps> = ({ onSignIn, isLoading, error, isReady }) => {
+export const AuthCard: React.FC<AuthCardProps> = ({
+  onSignIn,
+  isLoading,
+  error,
+  isReady,
+  onShowSecurity,
+  onShowPrivacy,
+}) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
@@ -17,8 +26,13 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSignIn, isLoading, error, 
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Mail className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Mail Flow</h2>
-            <p className="text-gray-600">Connect your Gmail account to get started with modern email management</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Welcome to Mail Flow
+            </h2>
+            <p className="text-gray-600">
+              Connect your Gmail account to get started with modern email
+              management
+            </p>
           </div>
 
           {error && (
@@ -36,12 +50,16 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSignIn, isLoading, error, 
               <Mail className="w-4 h-4 text-blue-500" />
               <span>Read, compose, and manage emails</span>
             </div>
+            <div className="flex items-center space-x-3 text-sm text-gray-600">
+              <Shield className="w-4 h-4 text-purple-500" />
+              <span>No data stored on our servers</span>
+            </div>
           </div>
 
           <button
             onClick={onSignIn}
             disabled={!isReady || isLoading}
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2"
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 mb-6"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -54,10 +72,53 @@ export const AuthCard: React.FC<AuthCardProps> = ({ onSignIn, isLoading, error, 
           </button>
 
           {!isReady && (
-            <p className="text-center text-sm text-gray-500 mt-4">
+            <p className="text-center text-sm text-gray-500 mb-6">
               Loading Google services...
             </p>
           )}
+
+          {/* Policy Links */}
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="text-sm font-medium text-gray-900 mb-3 text-center">
+              Privacy & Security
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={onShowSecurity}
+                className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
+              >
+                <Shield className="w-4 h-4" />
+                <span>Security Policy</span>
+              </button>
+              <button
+                onClick={onShowPrivacy}
+                className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Privacy Policy</span>
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 text-center mt-3">
+              Learn how we protect your data and privacy
+            </p>
+          </div>
+
+          {/* Google API Compliance Notice */}
+          <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="flex items-start space-x-2">
+              <Shield className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-xs text-blue-800 font-medium mb-1">
+                  Google API Compliance
+                </p>
+                <p className="text-xs text-blue-700">
+                  Mail Flow adheres to Google's API Services User Data Policy,
+                  including Limited Use requirements. Your data is processed
+                  securely and never stored on external servers.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

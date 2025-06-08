@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Mail, Send, Inbox, Settings } from 'lucide-react';
-import { InboxFeed } from './InboxFeed';
-import { EmailComposer } from './EmailComposer';
+import React, { useState } from "react";
+import { Mail, Send, Inbox } from "lucide-react";
+import { InboxFeed } from "./InboxFeed";
+import { EmailComposer } from "./EmailComposer";
 
-type TabType = 'inbox' | 'compose';
+type TabType = "inbox" | "compose";
 
 export const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('inbox');
+  const [activeTab, setActiveTab] = useState<TabType>("inbox");
 
   const tabs = [
-    { id: 'inbox' as TabType, label: 'Inbox', icon: Inbox },
-    { id: 'compose' as TabType, label: 'Compose', icon: Send },
+    { id: "inbox" as TabType, label: "Inbox", icon: Inbox },
+    { id: "compose" as TabType, label: "Compose", icon: Send },
   ];
 
   return (
@@ -29,8 +29,8 @@ export const Dashboard: React.FC = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                         activeTab === tab.id
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
                     >
                       <IconComponent className="w-5 h-5" />
@@ -40,10 +40,12 @@ export const Dashboard: React.FC = () => {
                 })}
               </div>
             </nav>
-            
+
             {/* Quick Stats */}
             <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-              <h3 className="text-sm font-medium text-gray-900 mb-3">Quick Stats</h3>
+              <h3 className="text-sm font-medium text-gray-900 mb-3">
+                Quick Stats
+              </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Status</span>
@@ -53,7 +55,9 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Service</span>
-                  <span className="text-sm font-medium text-gray-900">Gmail API</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    Gmail API
+                  </span>
                 </div>
               </div>
             </div>
@@ -61,8 +65,8 @@ export const Dashboard: React.FC = () => {
 
           {/* Main Content */}
           <div className="flex-1">
-            {activeTab === 'inbox' && <InboxFeed />}
-            {activeTab === 'compose' && <EmailComposer />}
+            {activeTab === "inbox" && <InboxFeed />}
+            {activeTab === "compose" && <EmailComposer />}
           </div>
         </div>
       </div>
