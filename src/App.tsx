@@ -19,56 +19,89 @@ function App() {
     isReady,
   } = useGmailAuth();
   const [currentView, setCurrentView] = useState<ViewType>("auth");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const handleShowSecurity = () => setCurrentView("security");
-  const handleShowPrivacy = () => setCurrentView("privacy");
-  const handleBackToAuth = () => setCurrentView("auth");
-  const handleBackToDashboard = () => setCurrentView("dashboard");
+  const handleViewChange = (newView: ViewType) => {
+    if (newView === currentView) return;
+
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentView(newView);
+      setIsTransitioning(false);
+    }, 150);
+  };
+
+  const handleShowSecurity = () => handleViewChange("security");
+  const handleShowPrivacy = () => handleViewChange("privacy");
+  const handleBackToAuth = () => handleViewChange("auth");
+  const handleBackToDashboard = () => handleViewChange("dashboard");
 
   // If authenticated, show dashboard
   if (isAuthenticated) {
     return (
-      <>
+      <div
+        className={`transition-all duration-300 ${
+          isTransitioning ? "opacity-0 blur-sm" : "opacity-100 blur-0"
+        }`}
+      >
         <Header
           userProfile={userProfile}
           isAuthenticated={isAuthenticated}
           onSignOut={signOut}
         />
         <Dashboard />
-      </>
+      </div>
     );
   }
 
   // Show policy pages when requested
   if (currentView === "security") {
     return (
-      <>
+      <div
+        className={`transition-all duration-300 ${
+          isTransitioning
+            ? "opacity-0 blur-sm scale-95"
+            : "opacity-100 blur-0 scale-100"
+        }`}
+      >
         <Header
           userProfile={null}
           isAuthenticated={false}
           onSignOut={signOut}
         />
         <SecurityPolicy onBack={handleBackToAuth} />
-      </>
+      </div>
     );
   }
 
   if (currentView === "privacy") {
     return (
-      <>
+      <div
+        className={`transition-all duration-300 ${
+          isTransitioning
+            ? "opacity-0 blur-sm scale-95"
+            : "opacity-100 blur-0 scale-100"
+        }`}
+      >
         <Header
           userProfile={null}
           isAuthenticated={false}
           onSignOut={signOut}
         />
         <PrivacyPolicy onBack={handleBackToAuth} />
-      </>
+      </div>
     );
   }
 
   // Show authentication page
   return (
-    <>
+    <div
+      className={`transition-all duration-300 ${
+        isTransitioning
+          ? "opacity-0 blur-sm scale-95"
+          : "opacity-100 blur-0 scale-100"
+      }`}
+    >
       <Header userProfile={null} isAuthenticated={false} onSignOut={signOut} />
       <AuthCard
         onSignIn={signIn}
@@ -78,7 +111,7 @@ function App() {
         onShowSecurity={handleShowSecurity}
         onShowPrivacy={handleShowPrivacy}
       />
-    </>
+    </div>
   );
 }
 
