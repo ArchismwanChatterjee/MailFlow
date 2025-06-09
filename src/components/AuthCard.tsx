@@ -1,5 +1,12 @@
 import React from "react";
-import { Mail, Shield, Loader2, FileText, ExternalLink } from "lucide-react";
+import {
+  Mail,
+  Shield,
+  Loader2,
+  FileText,
+  ExternalLink,
+  Scale,
+} from "lucide-react";
 
 interface AuthCardProps {
   onSignIn: () => void;
@@ -8,6 +15,7 @@ interface AuthCardProps {
   isReady: boolean;
   onShowSecurity: () => void;
   onShowPrivacy: () => void;
+  onShowTerms: () => void;
 }
 
 export const AuthCard: React.FC<AuthCardProps> = ({
@@ -17,6 +25,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   isReady,
   onShowSecurity,
   onShowPrivacy,
+  onShowTerms,
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex items-center justify-center p-4">
@@ -80,26 +89,35 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           {/* Policy Links */}
           <div className="border-t border-gray-200 pt-6">
             <h3 className="text-sm font-medium text-gray-900 mb-3 text-center">
-              Privacy & Security
+              Legal & Privacy
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               <button
-                onClick={onShowSecurity}
+                onClick={onShowTerms}
                 className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
               >
-                <Shield className="w-4 h-4" />
-                <span>Security Policy</span>
+                <Scale className="w-4 h-4" />
+                <span>Terms of Service</span>
               </button>
-              <button
-                onClick={onShowPrivacy}
-                className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Privacy Policy</span>
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={onShowSecurity}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>Security</span>
+                </button>
+                <button
+                  onClick={onShowPrivacy}
+                  className="flex items-center justify-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors border border-gray-200"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Privacy</span>
+                </button>
+              </div>
             </div>
             <p className="text-xs text-gray-500 text-center mt-3">
-              Learn how we protect your data and privacy
+              Learn about our terms, security, and privacy practices
             </p>
           </div>
 
@@ -108,7 +126,18 @@ export const AuthCard: React.FC<AuthCardProps> = ({
             <p className="text-xs text-gray-600 text-center mb-2">
               Direct Policy Links:
             </p>
-            <div className="flex justify-center space-x-4 text-xs">
+            <div className="flex flex-wrap justify-center gap-2 text-xs">
+              <a
+                href="/terms-of-service"
+                className="text-blue-600 hover:underline flex items-center space-x-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onShowTerms();
+                }}
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Terms</span>
+              </a>
               <a
                 href="/privacy-policy"
                 className="text-blue-600 hover:underline flex items-center space-x-1"
@@ -118,7 +147,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 }}
               >
                 <ExternalLink className="w-3 h-3" />
-                <span>Privacy Policy</span>
+                <span>Privacy</span>
               </a>
               <a
                 href="/security-policy"
@@ -129,7 +158,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 }}
               >
                 <ExternalLink className="w-3 h-3" />
-                <span>Security Policy</span>
+                <span>Security</span>
               </a>
             </div>
           </div>

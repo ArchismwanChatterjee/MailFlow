@@ -5,8 +5,9 @@ import { AuthCard } from "./components/AuthCard";
 import { Dashboard } from "./components/Dashboard";
 import { SecurityPolicy } from "./components/SecurityPolicy";
 import { PrivacyPolicy } from "./components/PrivacyPolicy";
+import { TermsOfService } from "./components/TermsOfService";
 
-type ViewType = "auth" | "dashboard" | "security" | "privacy";
+type ViewType = "auth" | "dashboard" | "security" | "privacy" | "terms";
 
 function App() {
   const {
@@ -28,6 +29,8 @@ function App() {
       setCurrentView("privacy");
     } else if (path === "/security-policy") {
       setCurrentView("security");
+    } else if (path === "/terms-of-service") {
+      setCurrentView("terms");
     }
   }, []);
 
@@ -41,6 +44,8 @@ function App() {
       window.history.pushState({}, "", "/privacy-policy");
     } else if (newView === "security") {
       window.history.pushState({}, "", "/security-policy");
+    } else if (newView === "terms") {
+      window.history.pushState({}, "", "/terms-of-service");
     } else {
       window.history.pushState({}, "", "/");
     }
@@ -53,6 +58,7 @@ function App() {
 
   const handleShowSecurity = () => handleViewChange("security");
   const handleShowPrivacy = () => handleViewChange("privacy");
+  const handleShowTerms = () => handleViewChange("terms");
   const handleBackToAuth = () => handleViewChange("auth");
   const handleBackToDashboard = () => handleViewChange("dashboard");
 
@@ -60,7 +66,8 @@ function App() {
   if (
     isAuthenticated &&
     currentView !== "security" &&
-    currentView !== "privacy"
+    currentView !== "privacy" &&
+    currentView !== "terms"
   ) {
     return (
       <div
@@ -117,6 +124,25 @@ function App() {
     );
   }
 
+  if (currentView === "terms") {
+    return (
+      <div
+        className={`transition-all duration-300 ${
+          isTransitioning
+            ? "opacity-0 blur-sm scale-95"
+            : "opacity-100 blur-0 scale-100"
+        }`}
+      >
+        <Header
+          userProfile={null}
+          isAuthenticated={false}
+          onSignOut={signOut}
+        />
+        <TermsOfService onBack={handleBackToAuth} />
+      </div>
+    );
+  }
+
   // Show authentication page (homepage)
   return (
     <div
@@ -134,6 +160,7 @@ function App() {
         isReady={isReady}
         onShowSecurity={handleShowSecurity}
         onShowPrivacy={handleShowPrivacy}
+        onShowTerms={handleShowTerms}
       />
     </div>
   );

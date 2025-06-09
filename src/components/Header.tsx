@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Mail, User, LogOut, X, FileText, Shield } from "lucide-react";
+import { Mail, User, LogOut, X, FileText, Shield, Scale } from "lucide-react";
 import { UserProfile } from "../types/gmail";
 
 interface HeaderProps {
@@ -24,8 +24,19 @@ export const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handlePolicyClick = (type: "privacy" | "security") => {
-    const url = type === "privacy" ? "/privacy-policy" : "/security-policy";
+  const handlePolicyClick = (type: "privacy" | "security" | "terms") => {
+    let url = "/";
+    switch (type) {
+      case "privacy":
+        url = "/privacy-policy";
+        break;
+      case "security":
+        url = "/security-policy";
+        break;
+      case "terms":
+        url = "/terms-of-service";
+        break;
+    }
     window.open(url, "_blank");
   };
 
@@ -57,6 +68,14 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Policy Links - Always visible on desktop, visible on mobile below */}
             <div className="hidden md:flex items-center space-x-2">
+              <button
+                onClick={() => handlePolicyClick("terms")}
+                className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                title="Terms of Service"
+              >
+                <Scale className="w-3 h-3" />
+                <span>Terms</span>
+              </button>
               <button
                 onClick={() => handlePolicyClick("privacy")}
                 className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
@@ -115,6 +134,14 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         {/* Policy Links for mobile (below header bar) */}
         <div className="flex md:hidden justify-end px-4 pb-2 space-x-2">
+          <button
+            onClick={() => handlePolicyClick("terms")}
+            className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+            title="Terms of Service"
+          >
+            <Scale className="w-3 h-3" />
+            <span>Terms</span>
+          </button>
           <button
             onClick={() => handlePolicyClick("privacy")}
             className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
