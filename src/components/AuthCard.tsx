@@ -103,6 +103,37 @@ export const AuthCard: React.FC<AuthCardProps> = ({
             </p>
           </div>
 
+          {/* Direct Links for Google Verification */}
+          <div className="mt-6 p-3 bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-xs text-gray-600 text-center mb-2">
+              Direct Policy Links:
+            </p>
+            <div className="flex justify-center space-x-4 text-xs">
+              <a
+                href="/privacy-policy"
+                className="text-blue-600 hover:underline flex items-center space-x-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onShowPrivacy();
+                }}
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Privacy Policy</span>
+              </a>
+              <a
+                href="/security-policy"
+                className="text-blue-600 hover:underline flex items-center space-x-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onShowSecurity();
+                }}
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Security Policy</span>
+              </a>
+            </div>
+          </div>
+
           {/* Google API Compliance Notice */}
           <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
             <div className="flex items-start space-x-2">

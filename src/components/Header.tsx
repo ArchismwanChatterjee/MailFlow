@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Mail, User, LogOut, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Mail, User, LogOut, X, FileText, Shield } from "lucide-react";
 import { UserProfile } from "../types/gmail";
 
 interface HeaderProps {
@@ -14,9 +14,20 @@ export const Header: React.FC<HeaderProps> = ({
   onSignOut,
 }) => {
   const [showMobileModal, setShowMobileModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Helper to detect mobile (tailwind 'lg' breakpoint)
-  const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+  // Responsive check for mobile devices
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handlePolicyClick = (type: "privacy" | "security") => {
+    const url = type === "privacy" ? "/privacy-policy" : "/security-policy";
+    window.open(url, "_blank");
+  };
 
   // Close modal when clicking outside the modal box
   const handleModalBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,6 +53,26 @@ export const Header: React.FC<HeaderProps> = ({
                   Modern Gmail Client
                 </p>
               </div>
+            </div>
+
+            {/* Policy Links - Always visible on desktop, visible on mobile below */}
+            <div className="hidden md:flex items-center space-x-2">
+              <button
+                onClick={() => handlePolicyClick("privacy")}
+                className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                title="Privacy Policy"
+              >
+                <FileText className="w-3 h-3" />
+                <span>Privacy</span>
+              </button>
+              <button
+                onClick={() => handlePolicyClick("security")}
+                className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                title="Security Policy"
+              >
+                <Shield className="w-3 h-3" />
+                <span>Security</span>
+              </button>
             </div>
 
             {isAuthenticated && userProfile && (
@@ -82,6 +113,25 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
         </div>
+        {/* Policy Links for mobile (below header bar) */}
+        <div className="flex md:hidden justify-end px-4 pb-2 space-x-2">
+          <button
+            onClick={() => handlePolicyClick("privacy")}
+            className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+            title="Privacy Policy"
+          >
+            <FileText className="w-3 h-3" />
+            <span>Privacy</span>
+          </button>
+          <button
+            onClick={() => handlePolicyClick("security")}
+            className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+            title="Security Policy"
+          >
+            <Shield className="w-3 h-3" />
+            <span>Security</span>
+          </button>
+        </div>
       </header>
 
       {/* Modal rendered outside header for proper overlay */}
@@ -93,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div
             className="bg-white rounded-xl shadow-lg p-6 w-11/12 max-w-xs relative flex flex-col items-center justify-center"
             style={{
-              position: "absolute",
+              position: "fixed",
               top: "25%",
               left: "50%",
               transform: "translate(-50%, -50%)",

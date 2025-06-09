@@ -21,10 +21,30 @@ function App() {
   const [currentView, setCurrentView] = useState<ViewType>("auth");
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Check URL for direct policy access
+  React.useEffect(() => {
+    const path = window.location.pathname;
+    if (path === "/privacy-policy") {
+      setCurrentView("privacy");
+    } else if (path === "/security-policy") {
+      setCurrentView("security");
+    }
+  }, []);
+
   const handleViewChange = (newView: ViewType) => {
     if (newView === currentView) return;
 
     setIsTransitioning(true);
+
+    // Update URL for policy pages
+    if (newView === "privacy") {
+      window.history.pushState({}, "", "/privacy-policy");
+    } else if (newView === "security") {
+      window.history.pushState({}, "", "/security-policy");
+    } else {
+      window.history.pushState({}, "", "/");
+    }
+
     setTimeout(() => {
       setCurrentView(newView);
       setIsTransitioning(false);
@@ -37,7 +57,11 @@ function App() {
   const handleBackToDashboard = () => handleViewChange("dashboard");
 
   // If authenticated, show dashboard
-  if (isAuthenticated) {
+  if (
+    isAuthenticated &&
+    currentView !== "security" &&
+    currentView !== "privacy"
+  ) {
     return (
       <div
         className={`transition-all duration-300 ${
@@ -93,7 +117,7 @@ function App() {
     );
   }
 
-  // Show authentication page
+  // Show authentication page (homepage)
   return (
     <div
       className={`transition-all duration-300 ${
