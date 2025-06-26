@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { AuthState, UserProfile } from '../types/gmail';
+import { useState, useEffect, useCallback } from "react";
+import { AuthState, UserProfile } from "../types/gmail";
 
 const CLIENT_ID = import.meta.env.VITE_APP_GMAIL_CLIENT_ID as string;
 const API_KEY = import.meta.env.VITE_APP_GMAIL_API_KEY as string;
@@ -33,9 +33,9 @@ export const useGmailAuth = () => {
       });
       setGapiInited(true);
     } catch (error) {
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
-        error: 'Failed to initialize Google API',
+        error: "Failed to initialize Google API",
         isLoading: false,
       }));
     }
@@ -48,14 +48,14 @@ export const useGmailAuth = () => {
         scope: SCOPES,
         callback: async (response: any) => {
           if (response.error) {
-            setAuthState(prev => ({
+            setAuthState((prev) => ({
               ...prev,
               error: response.error,
               isLoading: false,
             }));
             return;
           }
-          
+
           try {
             const profile = await getUserProfile();
             setAuthState({
@@ -65,9 +65,9 @@ export const useGmailAuth = () => {
               userProfile: profile,
             });
           } catch (error) {
-            setAuthState(prev => ({
+            setAuthState((prev) => ({
               ...prev,
-              error: 'Failed to get user profile',
+              error: "Failed to get user profile",
               isLoading: false,
             }));
           }
@@ -76,9 +76,9 @@ export const useGmailAuth = () => {
       setTokenClient(client);
       setGisInited(true);
     } catch (error) {
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
-        error: 'Failed to initialize Google Identity Services',
+        error: "Failed to initialize Google Identity Services",
         isLoading: false,
       }));
     }
@@ -86,20 +86,20 @@ export const useGmailAuth = () => {
 
   const getUserProfile = async (): Promise<UserProfile> => {
     const response = await window.gapi.client.gmail.users.getProfile({
-      userId: 'me',
+      userId: "me",
     });
     return response.result;
   };
 
   const signIn = useCallback(() => {
     if (!tokenClient) return;
-    
-    setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
-    
+
+    setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
+
     if (window.gapi.client.getToken() === null) {
-      tokenClient.requestAccessToken({ prompt: 'consent' });
+      tokenClient.requestAccessToken({ prompt: "consent" });
     } else {
-      tokenClient.requestAccessToken({ prompt: '' });
+      tokenClient.requestAccessToken({ prompt: "" });
     }
   }, [tokenClient]);
 
@@ -107,7 +107,7 @@ export const useGmailAuth = () => {
     const token = window.gapi.client.getToken();
     if (token !== null) {
       window.google.accounts.oauth2.revoke(token.access_token);
-      window.gapi.client.setToken('');
+      window.gapi.client.setToken("");
       setAuthState({
         isAuthenticated: false,
         isLoading: false,
@@ -120,12 +120,12 @@ export const useGmailAuth = () => {
   useEffect(() => {
     const checkInitialization = () => {
       if (gapiInited && gisInited) {
-        setAuthState(prev => ({ ...prev, isLoading: false }));
+        setAuthState((prev) => ({ ...prev, isLoading: false }));
       }
     };
 
     if (window.gapi && window.gapi.load) {
-      window.gapi.load('client', initializeGapi);
+      window.gapi.load("client", initializeGapi);
     }
 
     if (window.google && window.google.accounts) {
@@ -134,7 +134,7 @@ export const useGmailAuth = () => {
 
     const gapiInterval = setInterval(() => {
       if (window.gapi && window.gapi.load && !gapiInited) {
-        window.gapi.load('client', initializeGapi);
+        window.gapi.load("client", initializeGapi);
       }
       if (window.google && window.google.accounts && !gisInited) {
         initializeGis();
