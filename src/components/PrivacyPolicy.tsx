@@ -113,7 +113,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBack }) => {
                       Enable you to read, compose, and send emails
                     </p>
                   </div>
-                  <div className="hidden">
+                  <div>
                     <h4 className="font-medium text-gray-800 mb-1">
                       Search & Navigation
                     </h4>

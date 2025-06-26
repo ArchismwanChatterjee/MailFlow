@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Mail, Clock, User, Loader2, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
-import { GmailMessage, PaginationInfo } from '../types/gmail';
-import { useGmailApi } from '../hooks/useGmailApi';
-import { EmailViewer } from './EmailViewer';
+import React, { useState, useEffect } from "react";
+import {
+  Mail,
+  Clock,
+  User,
+  Loader2,
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { GmailMessage, PaginationInfo } from "../types/gmail";
+import { useGmailApi } from "../hooks/useGmailApi";
+import { EmailViewer } from "./EmailViewer";
 
 export const InboxFeed: React.FC = () => {
   const [messages, setMessages] = useState<GmailMessage[]>([]);
-  const [selectedMessage, setSelectedMessage] = useState<GmailMessage | null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<GmailMessage | null>(
+    null
+  );
   const [pagination, setPagination] = useState<PaginationInfo>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [messagesPerPage] = useState(10);
@@ -31,7 +41,7 @@ export const InboxFeed: React.FC = () => {
   const loadNextPage = async () => {
     if (pagination.nextPageToken) {
       await loadMessages(pagination.nextPageToken);
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
@@ -67,17 +77,22 @@ export const InboxFeed: React.FC = () => {
   }, []);
 
   const getMessageSubject = (message: GmailMessage): string => {
-    const subjectHeader = message.payload?.headers?.find(h => h.name.toLowerCase() === 'subject');
-    return subjectHeader?.value || 'No Subject';
+    const subjectHeader = message.payload?.headers?.find(
+      (h) => h.name.toLowerCase() === "subject"
+    );
+    return subjectHeader?.value || "No Subject";
   };
 
   const getMessageSender = (message: GmailMessage): string => {
-    const fromHeader = message.payload?.headers?.find(h => h.name.toLowerCase() === 'from');
+    const fromHeader = message.payload?.headers?.find(
+      (h) => h.name.toLowerCase() === "from"
+    );
     if (fromHeader?.value) {
-      const match = fromHeader.value.match(/<(.+)>/) || fromHeader.value.match(/(\S+@\S+)/);
+      const match =
+        fromHeader.value.match(/<(.+)>/) || fromHeader.value.match(/(\S+@\S+)/);
       return match ? match[1] || match[0] : fromHeader.value;
     }
-    return 'Unknown Sender';
+    return "Unknown Sender";
   };
 
   const formatDate = (timestamp: string): string => {
@@ -87,18 +102,27 @@ export const InboxFeed: React.FC = () => {
     const hours = diff / (1000 * 60 * 60);
 
     if (hours < 24) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } else if (hours < 168) {
-      return date.toLocaleDateString([], { weekday: 'short' });
+      return date.toLocaleDateString([], { weekday: "short" });
     } else {
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString([], { month: "short", day: "numeric" });
     }
   };
 
   // If a message is selected, show the email viewer
   if (selectedMessage) {
     return (
-      <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}>
+      <div
+        className={`transition-all duration-300 ${
+          isTransitioning
+            ? "opacity-0 blur-sm scale-95"
+            : "opacity-100 blur-0 scale-100"
+        }`}
+      >
         <EmailViewer message={selectedMessage} onBack={handleBackToInbox} />
       </div>
     );
@@ -111,7 +135,9 @@ export const InboxFeed: React.FC = () => {
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Mail className="w-6 h-6 text-red-600" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Failed to load inbox</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Failed to load inbox
+          </h3>
           <p className="text-gray-600 mb-4 text-sm lg:text-base">{error}</p>
           <button
             onClick={() => loadMessages(undefined, true)}
@@ -125,7 +151,11 @@ export const InboxFeed: React.FC = () => {
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-300 ${isTransitioning ? 'opacity-50 blur-sm' : 'opacity-100 blur-0'}`}>
+    <div
+      className={`bg-white rounded-xl shadow-sm border border-gray-200 transition-all duration-300 ${
+        isTransitioning ? "opacity-50 blur-sm" : "opacity-100 blur-0"
+      }`}
+    >
       <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3 min-w-0 flex-1">
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -135,7 +165,9 @@ export const InboxFeed: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-900">Inbox</h2>
             <p className="text-sm text-gray-500 truncate">
               <span className="inline lg:hidden">{messages.length} msgs</span>
-              <span className="hidden lg:inline">{messages.length} messages</span>
+              <span className="hidden lg:inline">
+                {messages.length} messages
+              </span>
               <span className="hidden sm:inline"> (Page {currentPage})</span>
             </p>
           </div>
@@ -146,7 +178,7 @@ export const InboxFeed: React.FC = () => {
           className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 flex-shrink-0"
           title="Refresh inbox"
         >
-          <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-5 h-5 ${isLoading ? "animate-spin" : ""}`} />
         </button>
       </div>
 
@@ -154,20 +186,26 @@ export const InboxFeed: React.FC = () => {
         {isLoading && messages.length === 0 ? (
           <div className="p-6 lg:p-8 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
-            <p className="text-gray-600 text-sm lg:text-base">Loading your inbox...</p>
+            <p className="text-gray-600 text-sm lg:text-base">
+              Loading your inbox...
+            </p>
           </div>
         ) : messages.length === 0 ? (
           <div className="p-6 lg:p-8 text-center">
             <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Mail className="w-6 h-6 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No messages found</h3>
-            <p className="text-gray-600 text-sm lg:text-base">Your inbox appears to be empty</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No messages found
+            </h3>
+            <p className="text-gray-600 text-sm lg:text-base">
+              Your inbox appears to be empty
+            </p>
           </div>
         ) : (
           messages.map((message) => (
-            <div 
-              key={message.id} 
+            <div
+              key={message.id}
               className="p-3 lg:p-4 hover:bg-gray-50 transition-colors cursor-pointer"
               onClick={() => handleMessageClick(message)}
             >
@@ -183,10 +221,14 @@ export const InboxFeed: React.FC = () => {
                     <div className="flex items-center space-x-1 text-xs text-gray-500 flex-shrink-0">
                       <Clock className="w-3 h-3" />
                       <span className="hidden sm:inline">
-                        {message.internalDate ? formatDate(message.internalDate) : 'Recent'}
+                        {message.internalDate
+                          ? formatDate(message.internalDate)
+                          : "Recent"}
                       </span>
                       <span className="sm:hidden">
-                        {message.internalDate ? formatDate(message.internalDate).split(' ')[0] : 'Now'}
+                        {message.internalDate
+                          ? formatDate(message.internalDate).split(" ")[0]
+                          : "Now"}
                       </span>
                     </div>
                   </div>
@@ -194,9 +236,9 @@ export const InboxFeed: React.FC = () => {
                     {getMessageSubject(message)}
                   </p>
                   <p className="text-xs lg:text-sm text-gray-600 line-clamp-2">
-                    {message.snippet || 'No preview available'}
+                    {message.snippet || "No preview available"}
                   </p>
-                  
+
                   {/* Mobile: Show message ID */}
                   <div className="mt-2 lg:hidden">
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
@@ -225,7 +267,8 @@ export const InboxFeed: React.FC = () => {
 
           <div className="flex items-center space-x-1 lg:space-x-2 text-center">
             <span className="text-xs lg:text-sm text-gray-600">
-              <span className="hidden sm:inline">Page </span>{currentPage}
+              <span className="hidden sm:inline">Page </span>
+              {currentPage}
             </span>
             {pagination.resultSizeEstimate && (
               <span className="text-xs text-gray-500 hidden lg:inline">

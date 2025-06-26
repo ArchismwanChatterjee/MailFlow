@@ -47,6 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  sessionStorage.setItem("emailAddress", userProfile?.emailAddress || "");
+  const email = sessionStorage.getItem("emailAddress");
+  console.log("Email Address from sessionStorage:", email);
+
   return (
     <>
       <header className="bg-white/90 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
