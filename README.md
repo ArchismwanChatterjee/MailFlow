@@ -147,3 +147,14 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 2. Deploy the `dist/` folder to your preferred static hosting (Vercel, Netlify, Firebase Hosting, etc.).
 
 ---
+
+## Live Demo
+
+The product is live at: [https://mail-flow.netlify.app](https://mail-flow.netlify.app)
+
+---
+
+## Constraints
+
+1. **Scheduled Mail**: Currently, automatic scheduling emails is supported only for durations within 1 hour.
+2. **OAuth Verification**: Google has not yet verified the application, so you may see a warning during the OAuth login process.
